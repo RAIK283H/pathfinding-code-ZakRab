@@ -25,7 +25,6 @@ def get_random_path():
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
     while target_node not in seen:
         curr_neighbors = curr_graph[curr_node][1]
-        print(curr_neighbors)
         next_node = random.choice(curr_neighbors)
         path.append(next_node)
         seen.add(next_node)
