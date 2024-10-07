@@ -22,6 +22,8 @@ def get_random_path():
     curr_node = 0
     path.append(curr_node)
     seen.add(0)
+    # precodition the graph has atleast one node
+    assert curr_graph[0] is not None
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
     while target_node not in seen:
         curr_neighbors = curr_graph[curr_node][1]
@@ -30,13 +32,16 @@ def get_random_path():
         seen.add(next_node)
         curr_node = next_node
 
-    while len(graph_data.graph_data[global_game_data.current_graph_index]) - 1 not in seen:
+    exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    while exit_node not in seen:
         curr_neighbors = curr_graph[curr_node][1]
         next_node = random.choice(curr_neighbors)
         path.append(next_node)
         seen.add(next_node)
         curr_node = next_node
-    
+        # postcondition the path has gone through both the target node and the exit node
+    assert target_node in seen
+    assert exit_node in seen
     return path
 
 
