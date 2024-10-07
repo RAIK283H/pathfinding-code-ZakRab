@@ -16,10 +16,33 @@ def get_test_path():
 
 
 def get_random_path():
-    return [1,2]
+    path = []
+    seen = set()
+    curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
+    curr_node = 0
+    path.append(curr_node)
+    seen.add(0)
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    while target_node not in seen:
+        curr_neighbors = curr_graph[curr_node][1]
+        print(curr_neighbors)
+        next_node = random.choice(curr_neighbors)
+        path.append(next_node)
+        seen.add(next_node)
+        curr_node = next_node
+
+    while len(graph_data.graph_data[global_game_data.current_graph_index]) - 1 not in seen:
+        curr_neighbors = curr_graph[curr_node][1]
+        next_node = random.choice(curr_neighbors)
+        path.append(next_node)
+        seen.add(next_node)
+        curr_node = next_node
+    
+    return path
 
 
 def get_dfs_path():
+
     return [1,2]
 
 
