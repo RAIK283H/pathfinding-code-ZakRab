@@ -12,7 +12,8 @@ def set_current_graph_paths():
 
 
 def get_test_path():
-    return graph_data.test_path[global_game_data.current_graph_index]
+    # return graph_data.test_path[global_game_data.current_graph_index]
+    return []
 
 
 def get_random_path():
@@ -42,17 +43,74 @@ def get_random_path():
         # postcondition the path has gone through both the target node and the exit node
     assert target_node in seen
     assert exit_node in seen
-    return path
+    # return path
+    return []
 
 
 def get_dfs_path():
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
+    seen = set()
+    path = []
+    seen.add(0)
+    def helper_target(curr_node):
+        for neighbor in curr_graph[curr_node][1]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                path.append(neighbor)
+                if neighbor == target_node:
+                    return path
+                else:
+                    return helper_target(neighbor)
+                    
+    def helper_exit(curr_node):
+        for neighbor in curr_graph[curr_node][1]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                path.append(neighbor)
+                if neighbor == exit_node:
+                    return path
+                else:
+                    return helper_exit(neighbor)
+    helper_target(0) 
+    helper_exit(target_node)
+    return path
 
-    return [1,2]
 
 
 def get_bfs_path():
-    return [1,2]
-
+    curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
+    seen = set()
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    path = []
+    queue = []
+    queue.append(0)
+    seen.add(0)
+    while queue:
+        curr_node = queue.pop()
+        path.append(curr_node)
+        for neighbor in curr_graph[curr_node][1]:
+            if neighbor not in seen:
+                if neighbor == target_node:
+                    path.append(neighbor)
+                    return path
+                seen.add(neighbor)
+                queue.append(neighbor)
+    queue.clear()
+    queue.append(target_node)
+    while queue:
+        curr_node = queue.pop()
+        path.append(curr_node)
+        for neighbor in curr_graph[curr_node][1]:
+            if neighbor not in seen:
+                if neighbor == exit_node:
+                    path.append(neighbor)
+                    return path
+                seen.add(neighbor)
+                queue.append(neighbor)
+    return path
 
 def get_dijkstra_path():
     return [1,2]
