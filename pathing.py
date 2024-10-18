@@ -52,30 +52,29 @@ def get_dfs_path():
     exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
     curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
     seen = set()
-    path = []
-    seen.add(0)
-    def helper_target(curr_node):
-        for neighbor in curr_graph[curr_node][1]:
-            if neighbor not in seen:
-                seen.add(neighbor)
-                path.append(neighbor)
-                if neighbor == target_node:
-                    return path
-                else:
-                    return helper_target(neighbor)
-                    
-    def helper_exit(curr_node):
-        for neighbor in curr_graph[curr_node][1]:
-            if neighbor not in seen:
-                seen.add(neighbor)
-                path.append(neighbor)
-                if neighbor == exit_node:
-                    return path
-                else:
-                    return helper_exit(neighbor)
-    helper_target(0) 
-    helper_exit(target_node)
-    return path
+    
+    def dfs(curr_node, start_node, end_node):
+        if curr_node in seen:
+            return None
+        seen.add(curr_node)
+        if curr_node == end_node:
+            return [curr_node]
+        for neighbor in sorted(curr_graph[curr_node][1]): 
+            path = dfs(neighbor, start_node, end_node)
+            if path is not None:
+                return [curr_node] + path
+        return None
+
+    
+    target_path = dfs(0, 0, target_node) 
+    if target_path is None:
+        return []  
+    seen.clear()
+    exit_path = dfs(target_node, target_node, exit_node)
+    if exit_path is None:
+        return target_path  
+    
+    return target_path + exit_path[1:] 
 
 
 
