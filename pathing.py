@@ -67,12 +67,8 @@ def get_dfs_path():
 
     
     target_path = dfs(0, 0, target_node) 
-    if target_path is None:
-        return []  
     seen.clear()
     exit_path = dfs(target_node, target_node, exit_node)
-    if exit_path is None:
-        return target_path  
     
     return target_path + exit_path[1:] 
 
@@ -80,36 +76,32 @@ def get_dfs_path():
 
 def get_bfs_path():
     curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
-    seen = set()
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
     exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
-    path = []
-    queue = []
-    queue.append(0)
-    seen.add(0)
-    while queue:
-        curr_node = queue.pop()
-        path.append(curr_node)
-        for neighbor in curr_graph[curr_node][1]:
-            if neighbor not in seen:
-                if neighbor == target_node:
-                    path.append(neighbor)
-                    return path
-                seen.add(neighbor)
-                queue.append(neighbor)
-    queue.clear()
-    queue.append(target_node)
-    while queue:
-        curr_node = queue.pop()
-        path.append(curr_node)
-        for neighbor in curr_graph[curr_node][1]:
-            if neighbor not in seen:
-                if neighbor == exit_node:
-                    path.append(neighbor)
-                    return path
-                seen.add(neighbor)
-                queue.append(neighbor)
-    return path
+
+    def bfs(start_node, end_node):
+        queue = []
+        queue.append([start_node])
+        visited = set()  
+        visited.add(start_node) 
+        
+        while queue:
+            curr_path = queue.pop(0)  
+            curr_node = curr_path[-1]
+            
+            if curr_node == end_node:
+                return curr_path
+            
+            for neighbor in sorted(curr_graph[curr_node][1]): 
+                if neighbor not in visited: 
+                    visited.add(neighbor) 
+                    new_path = list(curr_path) 
+                    new_path.append(neighbor)
+                    queue.append(new_path) 
+        
+
+
+    return bfs(0, target_node) + bfs(target_node, exit_node)[1:]
 
 def get_dijkstra_path():
     return [1,2]
