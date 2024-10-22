@@ -75,7 +75,7 @@ class Scoreboard:
         end_x = graph_data.graph_data[global_game_data.current_graph_index][-1][0][0]
         end_y = graph_data.graph_data[global_game_data.current_graph_index][-1][0][1]
         self.distance_to_exit = math.sqrt(pow(start_x - end_x, 2) + pow(start_y - end_y, 2))
-        self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
+        self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit) + "\n Winner: BFS"
     
     # function to update the nodes visited
     def update_path_length(self):
