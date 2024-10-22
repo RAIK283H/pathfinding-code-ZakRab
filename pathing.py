@@ -12,8 +12,7 @@ def set_current_graph_paths():
 
 
 def get_test_path():
-    # return graph_data.test_path[global_game_data.current_graph_index]
-    return []
+    return graph_data.test_path[global_game_data.current_graph_index]
 
 
 def get_random_path():
@@ -43,8 +42,7 @@ def get_random_path():
         # postcondition the path has gone through both the target node and the exit node
     assert target_node in seen
     assert exit_node in seen
-    # return path
-    return []
+    return path
 
 
 def get_dfs_path():
