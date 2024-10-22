@@ -67,7 +67,8 @@ def get_dfs_path():
     target_path = dfs(0, 0, target_node) 
     seen.clear()
     exit_path = dfs(target_node, target_node, exit_node)
-    
+    assert target_node in seen
+    assert exit_node in seen
     return target_path + exit_path[1:] 
 
 
@@ -76,11 +77,11 @@ def get_bfs_path():
     curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
     target_node = global_game_data.target_node[global_game_data.current_graph_index]
     exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    visited = set()  
 
     def bfs(start_node, end_node):
         queue = []
         queue.append([start_node])
-        visited = set()  
         visited.add(start_node) 
         
         while queue:
@@ -97,8 +98,9 @@ def get_bfs_path():
                     new_path.append(neighbor)
                     queue.append(new_path) 
         
-
-
+    assert target_node in visited
+    assert exit_node in visited
+    
     return bfs(0, target_node) + bfs(target_node, exit_node)[1:]
 
 def get_dijkstra_path():
