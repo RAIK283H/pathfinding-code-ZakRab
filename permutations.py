@@ -2,13 +2,11 @@ LEFT_TO_RIGHT = True
 RIGHT_TO_LEFT = False
 import graph_data
 
-def num_valid_cycles(current_graph):
+def valid_cycles(current_graph):
     """
     given a list of permutations and a graph, return the number of valid permutations that are valid hamiltonian cycles
     """
-    permutations = jst_permutations(graph_data.graph_data[current_graph])
-    def jst_permutations(graph):
-        n = len(graph)
+    def jst_permutations(n):
         permutation = list(range(n))
         permutations = []
         directions = [RIGHT_TO_LEFT] * n
@@ -58,14 +56,9 @@ def num_valid_cycles(current_graph):
                     directions[i] = not directions[i]
 
         return permutations
+    permutations = jst_permutations(len(graph_data.graph_data[current_graph]))
 
-
-    sum = 0
-    for permutation in permutations:
-        if is_valid_hamiltonian_cycle(permutation, current_graph):
-            return sum + 1
-
-    def is_valid_hamiltonian_cycle(permutation, current_graph):
+    def is_valid_hamiltonian_cycle(permutation):
         """
         Given a permutation and an adjacency list, return whether the permutation is a valid Hamiltonian cycle.
         """
@@ -75,8 +68,15 @@ def num_valid_cycles(current_graph):
             if permutation[-1] not in graph_data.graph_data[current_graph][permutation[-2]][1]:
                 return False
         return True
+
+
+    valid_cycles = []
+    for permutation in permutations:
+        if is_valid_hamiltonian_cycle(permutation):
+            valid_cycles.append(permutation)
+        return valid_cycles
     
-    if sum == 0:
+    if len(valid_cycles) == 0:
         return -1
     else:
-        return sum
+        return valid_cycles
