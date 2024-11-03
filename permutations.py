@@ -54,18 +54,18 @@ def valid_cycles(current_graph):
             for i in range(n):
                 if permutation[i] > largest_mobile_value:
                     directions[i] = not directions[i]
-
         return permutations
+    
     permutations = jst_permutations(len(graph_data.graph_data[current_graph]))
 
     def is_valid_hamiltonian_cycle(permutation):
         """
         Given a permutation and an adjacency list, return whether the permutation is a valid Hamiltonian cycle.
         """
-        for i in range(len(permutation) - 3):
+        for i in range(len(permutation) - 2):
             if permutation[i + 1] not in graph_data.graph_data[current_graph][permutation[i]][1]:
                 return False
-            if permutation[-1] not in graph_data.graph_data[current_graph][permutation[-2]][1]:
+            if permutation[0] not in graph_data.graph_data[current_graph][permutation[-1]][1]:
                 return False
         return True
 
@@ -74,7 +74,6 @@ def valid_cycles(current_graph):
     for permutation in permutations:
         if is_valid_hamiltonian_cycle(permutation):
             valid_cycles.append(permutation)
-        return valid_cycles
     
     if len(valid_cycles) == 0:
         return -1
