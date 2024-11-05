@@ -1,5 +1,5 @@
 '''
-graph_data[a] = gives you graph at index a
+g]aph_data[a] = gives you graph at index a
 graph_data[a][0] = start node of graph a
 graph_data[a][length-1] = exit node of graph a
 graph_data[a][b][0] = x-y coordinates as tuple of point b in graph a
@@ -12,7 +12,7 @@ Only the start and exit nodes are dead ends (all other nodes have degree >= 2)
 graph_data = [
     [
         [(0, 0), [1]],
-        [(200, -200), [0, 2]],
+        [(200, -200), [2]],
         [(200, -400), [0]]
     ],
     [

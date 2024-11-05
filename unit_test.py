@@ -4,6 +4,7 @@ import global_game_data
 from pathing import get_bfs_path, get_dfs_path
 import graph_data
 import pyglet
+from permutations import jst_permutations, valid_cycles
 class TestPathFinding(unittest.TestCase):
 
     def test_upper(self):
@@ -47,6 +48,74 @@ class TestBFS(unittest.TestCase):
         path = get_dfs_path()
         self.assertEqual(path, [0,1,2,3])
         pass
+class TestPermute(unittest.TestCase):
+    def test_permute1(self):
+        permutations = jst_permutations(1)
+        self.assertEqual(permutations, [[0]])
+        pass
+
+    def test_permute2(self):
+        permutations = jst_permutations(2)
+        self.assertEqual(permutations, [[0,1],[1,0]])
+        pass
+    
+    def test_permute3(self):
+        permutations = jst_permutations(3)
+        self.assertEqual(permutations, [[0,1,2],[0,2,1],[2,0,1],[2,1,0],[1,2,0],[1,0,2]])
+        pass
+class TestCycle(unittest.TestCase):
+    def test_cycle0(self):
+        graph_data.graph_data[0] = [
+            [(0, 0), [1, 2]],     
+            [(100, 0), [0, 2, 3]],
+            [(50, 100), [0, 1, 3, 4]],
+            [(150, 100), [1, 2, 4]],
+            [(100, 200), [2, 3]]   
+        ]
+        cycles = valid_cycles(0)
+        hamiltonian_paths = [
+            [0, 1, 2, 3, 4],
+            [0, 1, 3, 2, 4],
+            [0, 2, 1, 3, 4],
+            [0, 2, 3, 1, 4],
+            [0, 3, 1, 2, 4],
+            [0, 3, 2, 1, 4]
+        ]
+        self.assertEqual(cycles, hamiltonian_paths)
+        pass
+
+    def test_cycle1(self):
+        graph_data.graph_data[0] = [
+        [(0, 0), [1]],
+        [(200, -200), [2]],
+        [(200, -400), [0]]
+        ]
+        cycles = valid_cycles(0)
+        self.assertEqual(cycles, [[0, 1, 2], [2, 0, 1], [1, 2, 0]])
+        pass
+
+
+    def test_cycle2(self):
+        graph_data.graph_data[0] = [
+        [(0, 0), []],
+        [(200, -200), []],
+        [(200, -400), []]
+        ]
+        print(graph_data.graph_data[0])
+        cycles = valid_cycles(0)
+        self.assertEqual(cycles,  -1)
+        pass
+    
+    def test_cycle3(self):
+        graph_data.graph_data[0] = [
+        [(0, 0), [2]],
+        [(200, -200), [0]],
+        [(200, -400), [1]]
+        ]
+        cycles = valid_cycles(0)
+        self.assertEqual(cycles, [[0, 2, 1], [2, 1, 0], [1, 0, 2]])
+        pass
+
 if __name__ == '__main__':
     pyglet.app.run()
     unittest.main()
