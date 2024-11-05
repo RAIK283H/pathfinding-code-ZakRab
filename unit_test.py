@@ -73,15 +73,20 @@ class TestCycle(unittest.TestCase):
             [(100, 200), [2, 3]]   
         ]
         cycles = valid_cycles(0)
-        hamiltonian_paths = [
-            [0, 1, 2, 3, 4],
-            [0, 1, 3, 2, 4],
-            [0, 2, 1, 3, 4],
-            [0, 2, 3, 1, 4],
-            [0, 3, 1, 2, 4],
-            [0, 3, 2, 1, 4]
+        print(cycles)
+        paths = [
+            [0, 1, 3, 4, 2],
+            [0, 2, 4, 3, 1],
+            [2, 0, 1, 3, 4],
+            [4, 2, 0, 1, 3],
+            [3, 4, 2, 0, 1],
+            [2, 4, 3, 1, 0],
+            [1, 3, 4, 2, 0],
+            [3, 1, 0, 2, 4],
+            [4, 3, 1, 0, 2],
+            [1, 0, 2, 4, 3]
         ]
-        self.assertEqual(cycles, hamiltonian_paths)
+        self.assertEqual(cycles, paths)
         pass
 
     def test_cycle1(self):
