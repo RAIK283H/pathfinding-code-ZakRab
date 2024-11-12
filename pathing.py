@@ -1,3 +1,4 @@
+import heapq
 import graph_data
 import global_game_data
 from numpy import random
@@ -107,4 +108,46 @@ def get_bfs_path():
     return bfs(0, target_node) + bfs(target_node, exit_node)[1:]
 
 def get_dijkstra_path():
-    return [1,2]
+    curr_graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    
+    def dijkstra(start_node, end_node):
+        heap = []
+        heapq.heappush(heap, (0, start_node, [start_node]))
+        distances = {node: float('inf') for node in range(len(curr_graph))}
+        distances[start_node] = 0
+        
+        while heap:
+            curr_distance, curr_node, path = heapq.heappop(heap)
+            
+            if curr_node == end_node:
+                return path
+            
+            for neighbor in curr_graph[curr_node][1]:
+                x,y = curr_graph[neighbor][0]
+                x2,y2 = curr_graph[curr_node][0]
+                weight = ((x2-x)**2 + (y2-y)**2)**0.5
+                distance = curr_distance + weight
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+                    heapq.heappush(heap, (distance, neighbor, path + [neighbor]))
+        
+        return None
+
+    target_path = dijkstra(0, target_node)
+    exit_path = dijkstra(target_node, exit_node)
+    result_path = target_path + exit_path[1:]
+    assert target_path is not None
+    assert exit_path is not None
+
+    # Postcondition: The result path begins at the start node.
+    assert result_path[0] == 0
+    # Postcondition: The result path ends at the exit_node.
+    assert result_path[-1] == exit_node
+    # # Postcondition: Every pair of vertices adjacent in the result path is an edge in the graph.
+    # for i in range(len(result_path) - 1):
+    #     assert result_path[i + 1] in [neighbor for neighbor, _ in curr_graph[result_path[i]][1]]
+    
+    return result_path
+
