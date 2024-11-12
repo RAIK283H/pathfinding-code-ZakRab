@@ -1,7 +1,7 @@
 import math
 import unittest
 import global_game_data
-from pathing import get_bfs_path, get_dfs_path
+from pathing import get_bfs_path, get_dfs_path, get_dijkstra_path
 import graph_data
 import pyglet
 from permutations import jst_permutations, valid_cycles
@@ -119,6 +119,35 @@ class TestCycle(unittest.TestCase):
         ]
         cycles = valid_cycles(0)
         self.assertEqual(cycles, [[0, 2, 1], [2, 1, 0], [1, 0, 2]])
+        pass
+
+class TestDijkstra(unittest.TestCase):
+    def test_dijkstra1(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data[0] = [
+        [(0, 0), [1]],
+        [(200, -200), [2]],
+        [(200, -400), []]
+        ]
+        path = get_dijkstra_path()
+        self.assertEqual(path, [0, 1, 2])
+        pass
+
+    def test_dijkstra2(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data[0] = [
+        [(0, 0), []],
+        [(200, -200), []],
+        [(200, -400), []]
+        ]
+        path = get_dijkstra_path()
+        self.assertEqual(path, [])
+        pass
+
+    def test_dijkstra3(self):
+        global_game_data.current_graph_index = 1
+        path = get_dijkstra_path()
+        self.assertEqual(path, [0, 1, 2, 3])
         pass
 
 if __name__ == '__main__':
