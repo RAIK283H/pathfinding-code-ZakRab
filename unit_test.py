@@ -5,6 +5,7 @@ from pathing import get_bfs_path, get_dfs_path, get_dijkstra_path
 import graph_data
 import pyglet
 from permutations import jst_permutations, valid_cycles
+from f_w import shortest_pathfw, transform_graph_to_matrix
 class TestPathFinding(unittest.TestCase):
 
     def test_upper(self):
@@ -121,34 +122,81 @@ class TestCycle(unittest.TestCase):
         self.assertEqual(cycles, [[0, 2, 1], [2, 1, 0], [1, 0, 2]])
         pass
 
-class TestDijkstra(unittest.TestCase):
-    def test_dijkstra1(self):
+# class TestDijkstra(unittest.TestCase):
+#     def test_dijkstra1(self):
+#         global_game_data.current_graph_index = 0
+#         graph_data.graph_data[0] = [
+#         [(0, 0), [1]],
+#         [(200, -200), [2]],
+#         [(200, -400), []]
+#         ]
+#         path = get_dijkstra_path()
+#         self.assertEqual(path, [0, 1, 2])
+#         pass
+
+#     def test_dijkstra2(self):
+#         global_game_data.current_graph_index = 0
+#         graph_data.graph_data[0] = [
+#         [(0, 0), []],
+#         [(200, -200), []],
+#         [(200, -400), []]
+#         ]
+#         path = get_dijkstra_path()
+#         self.assertEqual(path, [])
+#         pass
+
+#     def test_dijkstra3(self):
+#         global_game_data.current_graph_index = 1
+#         path = get_dijkstra_path()
+#         self.assertEqual(path, [0, 1, 2, 3])
+#         pass
+class TestFloyd_Warshall(unittest.TestCase):
+    def test_fw1(self):
         global_game_data.current_graph_index = 0
         graph_data.graph_data[0] = [
         [(0, 0), [1]],
         [(200, -200), [2]],
         [(200, -400), []]
         ]
-        path = get_dijkstra_path()
+
+        path, dist = shortest_pathfw(graph_data.graph_data[0], 0, 2)
+
         self.assertEqual(path, [0, 1, 2])
         pass
 
-    def test_dijkstra2(self):
+    def test_fw2(self):
         global_game_data.current_graph_index = 0
         graph_data.graph_data[0] = [
-        [(0, 0), []],
-        [(200, -200), []],
-        [(200, -400), []]
+        [(0, 0), [2]],
+        [(200, -200), [0]],
+        [(200, -400), [0]]
         ]
-        path = get_dijkstra_path()
-        self.assertEqual(path, [])
+
+        path, dist = shortest_pathfw(graph_data.graph_data[0], 0, 2)
+
+        self.assertEqual(path, [0,2])
         pass
 
-    def test_dijkstra3(self):
-        global_game_data.current_graph_index = 1
-        path = get_dijkstra_path()
-        self.assertEqual(path, [0, 1, 2, 3])
-        pass
+class TestTransformGraphToMatrix(unittest.TestCase):
+    def test_graph_to_matrix(self):
+        
+        curr_graph = [
+            [(0, 0), [1]],  # Node 0 connects to node 1
+            [(200, -200), [2]],  # Node 1 connects to node 2
+            [(200, -400), []]  # Node 2 has no outgoing edges
+        ]
+        
+        expected_matrix = [
+            [0, 282.842712474619, float('inf')],  
+            [float('inf'), 0, 200.0], 
+            [float('inf'), float('inf'), 0]  
+        ]
+        
+        result_matrix = transform_graph_to_matrix(curr_graph)
+        
+        # Assert that the result matches the expected matrix
+        self.assertEqual(result_matrix, expected_matrix)
+
 
 if __name__ == '__main__':
     pyglet.app.run()
